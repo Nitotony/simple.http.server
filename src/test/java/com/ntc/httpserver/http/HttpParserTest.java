@@ -17,12 +17,74 @@ class HttpParserTest {
         httpParser = new HttpParser();
     }
     @Test
-    void parseHttpRequest() {
-        httpParser.parseHttpRequest(
-                generateValidTestCase()
-        );
+    void parseHttpRequestGood() {
+        HttpRequest request= null;
+        try {
+            request = httpParser.parseHttpRequest(
+                    generateValidTestCase()
+            );
+        } catch (HttpPassingException e) {
+            fail(e);
+        }
+
+        assertEquals(request.getMethod(),HttpMethod.GET);
     }
 
+
+    @Test
+    void parseHttpsRequestBad() {
+        HttpRequest request= null;
+        try {
+            request = httpParser.parseHttpRequest(
+                    generateBadTestCase()
+            );
+            fail();
+        } catch (HttpPassingException e) {
+            assertEquals(e.getMessage(),HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED.MESSAGE);
+
+
+
+
+
+    }}
+
+    @Test
+    void parseHttpsRequestBad_Method_Len_Large() {
+        HttpRequest request= null;
+        try {
+            request = httpParser.parseHttpRequest(
+                    generateBadTestCase_Method_Len_Large()
+            );
+            fail();
+        } catch (HttpPassingException e) {
+            assertEquals(e.getMessage(),HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED.MESSAGE);
+
+
+
+        }}
+
+
+
+    private InputStream generateBadTestCase() {
+
+        String rawData="GeT /login HTTP/1.1\r\n" +"\r\n";
+        InputStream inputStream = new ByteArrayInputStream(
+                rawData.getBytes(
+                        StandardCharsets.US_ASCII
+                )
+        );
+        return inputStream;
+    }
+    private InputStream generateBadTestCase_Method_Len_Large() {
+
+        String rawData="GTERFSDSDGSDG /login HTTP/1.1\r\n" +"\r\n";
+        InputStream inputStream = new ByteArrayInputStream(
+                rawData.getBytes(
+                        StandardCharsets.US_ASCII
+                )
+        );
+        return inputStream;
+    }
     private InputStream generateValidTestCase(){
         String rawData="GET /login HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +

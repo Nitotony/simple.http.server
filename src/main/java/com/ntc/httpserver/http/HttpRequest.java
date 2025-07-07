@@ -1,5 +1,7 @@
 package com.ntc.httpserver.http;
 
+import com.ntc.httpserver.config.HttpConfigurationException;
+
 public class HttpRequest extends HttpMessage{
 
 
@@ -15,7 +17,15 @@ public class HttpRequest extends HttpMessage{
         return method;
     }
 
-    void setMethod(HttpMethod method) {
-        this.method = method;
+    void setMethod(String methodname) throws HttpPassingException {
+        for (HttpMethod method : HttpMethod.values()) {
+            if(methodname.equals(method.name())) {
+                this.method = method;
+                return;
+            }
+        }
+        throw new HttpPassingException(HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED);
+
+
     }
 }
