@@ -1,9 +1,9 @@
 package com.ntc.httpserver.http;
 
-public class HttpPassingException  extends Exception {
+public class HttpParsingException extends Exception {
     private final HttpStatusCode errorCode;
 
-    public HttpPassingException(HttpStatusCode errorCode) {
+    public HttpParsingException(HttpStatusCode errorCode) {
         super(errorCode.MESSAGE);
         this.errorCode = errorCode;
     }
