@@ -26,9 +26,11 @@ public class HttpHeadersParserTest {
     }
     @Test
     public void testSimpleSingleHeader() throws InvocationTargetException, IllegalAccessException {
-        HttpRequest request=new HttpRequest();
-        parseHeaderMethod.invoke(httpParser, generateSimpleSingleHeaderMessage(), request);
-    }
+    HttpRequest request = new HttpRequest();
+    InputStream inputStream = generateSimpleSingleHeaderMessage();
+    InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.US_ASCII);
+    parseHeaderMethod.invoke(httpParser, reader, request);
+}
 
     private InputStream  generateSimpleSingleHeaderMessage(){
         String rawdata="Host: localhost:8080\r\n";
